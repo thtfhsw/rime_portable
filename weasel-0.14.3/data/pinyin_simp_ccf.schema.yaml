@@ -1,0 +1,103 @@
+# Rime schema
+# encoding: utf-8
+
+schema:
+  schema_id: pinyin_simp_ccf
+  name: ccf论坛拼音输入法
+  version: "d3"
+  author:
+    - hsw@ccf论坛
+  description: 
+    字根库源自《深蓝词库转换项目》的GBK_准确拼音_固顶字库
+# 不依赖任何其他输入法
+#  dependencies:
+#    - stroke
+
+
+switches:
+  # 切换到输入法时默认英文
+  - name: ascii_mode 
+    # 如果要默认中文，这里设置为0
+    reset: 1 
+    states: ["中文", "英文"]
+
+  # 默认简体输入
+  - name: zh_simp
+    # 如果需要默认繁体输入，这里设置为0
+    reset: 1
+    states: ["繁体", "简体"]
+  
+  # 默认输入全角字符
+  - name: ascii_punct
+    # 如果需要半角字符，这里设置为1
+    reset: 0
+    states: ["。，", "．，"]
+
+# 默认显示9个字
+menu:page_size: 9
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - script_translator
+    - reverse_lookup_translator
+
+  filters:
+    - simplifier
+    - uniquifier
+
+speller:
+  alphabet: zyxwvutsrqponmlkjihgfedcba
+  delimiter: " '"
+  algebra:
+    - abbrev/^([a-z]).+$/$1/
+    - abbrev/^([zcs]h).+$/$1/
+    - derive/^([nl])ue$/$1ve/
+    - derive/^([jqxy])u/$1v/
+    - derive/un$/uen/
+    - derive/ui$/uei/
+    - derive/iu$/iou/
+    - derive/([aeiou])ng$/$1gn/
+    - derive/([dtngkhrzcs])o(u|ng)$/$1o/
+    - derive/ong$/on/
+    - derive/ao$/oa/
+    - derive/([iu])a(o|ng?)$/a$1$2/
+
+translator:
+  dictionary: pinyin_simp_ccf
+  preedit_format:
+    - xform/([nl])v/$1ü/
+    - xform/([nl])ue/$1üe/
+    - xform/([jqxy])v/$1u/
+
+# 使用默认的标点符号库
+punctuator:
+  import_preset: symbols
+
+# 使用默认的按键
+key_binder:
+  import_preset: default
+
+recognizer:
+  import_preset: default
+  patterns:
+    # hack: to enable "/fh" style symbols, '/' must be mapped to a [list].
+    # so those who have customized '/' for direct commit won't be affected by
+    # this change.
+    punct: "^/([0-9]+[a-z]*|[a-z]+)$"
+    reverse_lookup: "`[a-z]*'?$"

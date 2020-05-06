@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "WEB-INF/libs/pinyin4j-2.5.0.jar"
+    ]
+}
