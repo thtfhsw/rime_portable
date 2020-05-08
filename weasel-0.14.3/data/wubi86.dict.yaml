@@ -17,10 +17,12 @@
 # Original table author
 # Wozy <wozy.in@gmail.com>
 
+
 ---
 name: wubi86
 version: "0.7"
 sort: by_weight
+use_preset_vocabulary : true
 columns:
   - text
   - code
