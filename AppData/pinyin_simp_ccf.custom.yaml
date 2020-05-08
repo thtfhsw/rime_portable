@@ -1,0 +1,191 @@
+# Rime custom settings
+# encoding: utf-8
+patch:
+  switches:
+    # 如果要默认中文，这里设置为0
+    # 由于ccf论坛输入法结合其他工具一起使用，可以在Win10使用Ctrl+空格切换
+    # 和【简体美式键盘】一起使用，可以实现Win7中文输入法的使用体验
+    # 因此，默认是中文，设置【简体美式键盘】为默认输入法，使用Ctrl+空格切换到输入法后，默认就是中文，不用在切换
+    # 如果您的使用环境，没有结合这些工具一起使用，这里可以注释，默认是英文输入，用shift按键切换中英文
+    reset: 0 
+
+  #这里设置自定义短语，用于维护快速短语，具体参见《custom_phrase.txt》
+  custom_phrase:
+    # 指定词典格式为文本码表格式（文字<TAB>编码<TAB>权重（可选））
+    db_class: stabledb
+    dictionary: ""
+    enable_completion: false
+    enable_sentence: false
+    initial_quality: 1
+    user_dict: custom_phrase
+  engine:
+    translators:
+      - punct_translator
+      - table_translator@custom_phrase
+      - reverse_lookup_translator
+      - script_translator
+      
+      # 将 `date`/'rq' 翻译为当前日期
+      - lua_translator@date_translator
+      # 将 `time`/'sj' 翻译为当前时间
+      - lua_translator@time_translator
+      # 将 `now`/'xz' 翻译为当前日期时间
+      - lua_translator@now_translator
+      # 将 `/` + 阿拉伯数字 翻译为大小写汉字
+      - lua_translator@number_translator 
+      
+    filters:
+      - simplifier
+      - uniquifier
+      
+      # 依地球拼音为候选项加上带调拼音的注释
+      - lua_filter@reverse_lookup_filter
+      # 为候选项加上其所属字符集的注释(不知道作用) 
+      # - lua_filter@charset_comment_filter
+      # 候选项重排序，使单字优先(不知道作用，有点类似微软输入法风格)
+      # - lua_filter@single_char_filter
+    processors:
+      - ascii_composer
+      - recognizer
+      - key_binder
+      - speller
+      - punctuator
+      - selector
+      - navigator
+      - express_editor
+    segmentors:
+      - ascii_segmentor
+      - matcher
+      - abc_segmentor
+      - punct_segmentor
+      - fallback_segmentor
+
+  #===========================模糊拼音设置开始===========================
+  'speller/algebra':					# 模糊拼音设置
+    - erase/^xx$/					# 第一行保留
+    #
+    # 模糊音定義
+    # 需要哪組就刪去行首的 # 號，單雙向任選
+    - derive/^([zcs])h/$1/             # zh, ch, sh => z, c, s
+    - derive/^([zcs])([^h])/$1h$2/     # z, c, s => zh, ch, sh
+    #
+    #- derive/^n/l/                     # n => l
+    #- derive/^l/n/                     # l => n
+    #
+    # 這兩組一般是單向的
+    #- derive/^r/l/                     # r => l
+    #
+    #- derive/^ren/yin/                 # ren => yin, reng => ying
+    #- derive/^r/y/                     # r => y
+    #
+    # 下面 hu <=> f 這組寫法複雜一些，分情況討論
+    #- derive/^hu$/fu/                  # hu => fu
+    #- derive/^hong$/feng/              # hong => feng
+    #- derive/^hu([in])$/fe$1/          # hui => fei, hun => fen
+    #- derive/^hu([ao])/f$1/            # hua => fa, ...
+    #
+    #- derive/^fu$/hu/                  # fu => hu
+    #- derive/^feng$/hong/              # feng => hong
+    #- derive/^fe([in])$/hu$1/          # fei => hui, fen => hun
+    #- derive/^f([ao])/hu$1/            # fa => hua, ...
+    #
+    # 韻母部份
+    #- derive/^([bpmf])eng$/$1ong/      # meng = mong, ...
+    - derive/([eia])n$/$1ng/            # en => eng, in => ing, an => ang
+    - derive/([eia])ng$/$1n/            # eng => en, ing => in, ang => an
+    #
+    # 關於ian/uan = iang/uang 的模糊音設置
+    # - derive/([iu])an$/$lang/          # ian => iang, uan => uang
+    # - derive/([iu])ang$/$lan/          # iang => ian, uang => uan
+    #
+    # 樣例足夠了，其他請自己總結……
+    #
+    # 反模糊音？
+    # 誰說方言沒有普通話精確、有模糊音，就能有反模糊音。
+    # 示例爲分尖團的中原官話：
+    #- derive/^ji$/zii/   # 在設計者安排下鳩佔鵲巢，尖音i只好雙寫了
+    #- derive/^qi$/cii/
+    #- derive/^xi$/sii/
+    #- derive/^ji/zi/
+    #- derive/^qi/ci/
+    #- derive/^xi/si/
+    #- derive/^ju/zv/
+    #- derive/^qu/cv/
+    #- derive/^xu/sv/
+    # 韻母部份，只能從大面上覆蓋
+    #- derive/^([bpm])o$/$1eh/          # bo => beh, ...
+    #- derive/(^|[dtnlgkhzcs]h?)e$/$1eh/  # ge => geh, se => sheh, ...
+    #- derive/^([gkh])uo$/$1ue/         # guo => gue, ...
+    #- derive/^([gkh])e$/$1uo/          # he => huo, ...
+    #- derive/([uv])e$/$1o/             # jue => juo, lve => lvo, ...
+    #- derive/^fei$/fi/                 # fei => fi
+    #- derive/^wei$/vi/                 # wei => vi
+    #- derive/^([nl])ei$/$1ui/          # nei => nui, lei => lui
+    #- derive/^([nlzcs])un$/$1vn/       # lun => lvn, zun => zvn, ... 
+    #- derive/^([nlzcs])ong$/$1iong/    # long => liong, song => siong, ...
+    # 這個辦法雖從拼寫上做出了區分，然而受詞典制約，候選字仍是混的。
+    # 只有真正的方音輸入方案纔能做到！但「反模糊音」這個玩法快速而有效！
+    #
+    # 模糊音定義先於簡拼定義，方可令簡拼支持以上模糊音
+    - abbrev/^([a-z]).+$/$1/           # 簡拼（首字母）
+    - abbrev/^([zcs]h).+$/$1/          # 簡拼（zh, ch, sh）
+    #
+    # 以下是一組容錯拼寫，《漢語拼音》方案以前者爲正
+    - derive/^([nl])ve$/$1ue/          # nve = nue, lve = lue
+    - derive/^([jqxy])u/$1v/           # ju = jv,
+    - derive/un$/uen/                  # gun = guen,
+    - derive/ui$/uei/                  # gui = guei,
+    - derive/iu$/iou/                  # jiu = jiou,
+    #
+    # 自動糾正一些常見的按鍵錯誤
+    - derive/([aeiou])ng$/$1gn/        # dagn => dang 
+    - derive/([dtngkhrzcs])o(u|ng)$/$1o/  # zho => zhong|zhou
+    - derive/ong$/on/                  # zhonguo => zhong guo
+    - derive/ao$/oa/                   # hoa => hao
+    - derive/([iu])a(o|ng?)$/a$1$2/    # tain => tian
+    #
+    # 分尖團後 v => ü 的改寫條件也要相應地擴充：
+    #'translator/preedit_format':
+    #  - "xform/([nljqxyzcs])v/$1ü/"
+  #===========================模糊拼音设置完成===========================
+
+
+  # 句读模式数字，设置以'/'和'v'开头时，进入punct模式
+  recognizer/patterns/punct: "^[/v]([0-9]+[a-z]*|[a-z]+)$"
+
+  #
+  # 使用自定义的essay-custom.txt八股文词频库后，原来自带字典的词组没有意义
+  # 这里将原来的pinyin_simp.dict进行了精简，只保留单字字根
+  # 并修正原来自带字典库中的各种错误，比如：
+  #    ①输入'm'出现'呒(fǔ)'、'嘸(fǔ mǔ)'、'呣(mú mù)'的福建口音问题；
+  #    ②输入'n'出现'嗯(ēn èn en5 eng5)'、'唔(wù)'，鼻音码问题。
+  # 指定自定义词库位置
+  # "translator/dictionary": "pinyin_simp.GBK.character"
+  #
+  
+  #连打功能：註：這個選項僅針對 table_translator，用於屏蔽倉頡、五筆中帶有太極圖章「☯」的連打詞句選項，不可作用於拼音、注音、速成等輸入方案。
+  "translator/enable_sentence": false
+  # 词频调整功能是否启用，建议开启，否则新词不会顶置
+  "translator/enable_user_dict": true
+  #逐渐提示 
+  # 是否启用英文输入联想补全
+  #默認開啓逐鍵提示。若要只出精確匹配輸入碼的候選字，可關閉這一選項。
+  "translator/enable_completion": true
+
+  #加载 easy_en 依赖
+  "schema/dependencies/@1": easy_en
+  # 载入翻译英文的码表翻译器，取名为 english
+  "engine/translators/@next": table_translator@english
+  # english 翻译器的设定项
+  english:  
+    dictionary: easy_en
+    spelling_hints: 9
+    # 是否启用英文输入联想补全
+    enable_completion: true
+    enable_sentence: false
+    # 调整英文候选词的位置，如为0，表示和汉字一起候选；如果为-3表示先显示3个汉字候选字后再显示英文
+    initial_quality: -5
+
+  # 換上了自己習慣的一套標點！
+  # 'punctuator/import_preset': alternative
+

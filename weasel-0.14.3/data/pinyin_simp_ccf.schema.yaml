@@ -3,12 +3,12 @@
 
 schema:
   schema_id: pinyin_simp_ccf
-  name: ccf论坛拼音输入法
-  version: "d3"
+  name: 拼音输入法
+  version: "d4"
   author:
     - hsw@ccf论坛
   description: 
-    字根库源自《深蓝词库转换项目》的GBK_准确拼音_固顶字库
+    集成2.8万字的GBK字根库、40万条汉语词汇的词库（八股文词库）和17万的英文词库（easy_en词库）
 # 不依赖任何其他输入法
 #  dependencies:
 #    - stroke

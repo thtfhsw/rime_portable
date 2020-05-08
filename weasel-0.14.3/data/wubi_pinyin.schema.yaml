@@ -11,7 +11,7 @@ schema:
     五筆字型86版＋漢語拼音混合輸入。
     碼表源自 ibus-table
   dependencies:
-    - pinyin_simp
+    - pinyin_simp_ccf
 
 switches:
   - name: ascii_mode
