@@ -1,8 +1,8 @@
 __build_info:
-  rime_version: 1.5.3
+  rime_version: 1.7.2
   timestamps:
     default: 1561218646
-    default.custom: 1588952305
+    default.custom: 1654168451
     key_bindings: 1561218646
     key_bindings.custom: 0
     punctuation: 1561218646

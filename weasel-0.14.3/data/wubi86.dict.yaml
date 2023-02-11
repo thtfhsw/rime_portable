@@ -22,6 +22,7 @@
 name: wubi86
 version: "0.7"
 sort: by_weight
+# 建议使用八股文词频生成器来生成一个针对自己的词频库
 use_preset_vocabulary : true
 columns:
   - text

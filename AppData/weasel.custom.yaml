@@ -1,10 +1,14 @@
-#Custom File Create By RimeControl On 2020-04-14 23:52:19
-#如果修改，请认真阅读 Rime定製指南 https://github.com/rime/home/wiki/CustomizationGuide 的要求！！
+customization: 
+  distribution_code_name: Weasel
+  distribution_version: 0.14.3
+  generator: "Weasel: :UIStyleSettings"
+  modified_time: "Tue Apr 27 14: 44:59 2021"
+  rime_version: 1.7.2
 patch: 
+  "style/color_scheme": dark_temple
+  "style/display_tray_icon": false
   "style/font_face": "Microsoft YaHei"
   "style/font_point": 24
-  "style/horizontal": false
-  "style/display_tray_icon": false
-  "style/inline_preedit": true
   "style/fullscreen": false
-  "style/color_scheme": dark_temple
+  "style/horizontal": false
+  "style/inline_preedit": true
