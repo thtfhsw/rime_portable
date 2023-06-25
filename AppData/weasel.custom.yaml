@@ -1,11 +1,11 @@
-customization: 
+customization:
   distribution_code_name: Weasel
-  distribution_version: 0.14.3
-  generator: "Weasel: :UIStyleSettings"
-  modified_time: "Tue Apr 27 14: 44:59 2021"
-  rime_version: 1.7.2
-patch: 
-  "style/color_scheme": dark_temple
+  distribution_version: 0.15.0.0
+  generator: "Weasel::UIStyleSettings"
+  modified_time: "Sat Jun 24 22:31:52 2023"
+  rime_version: 1.8.5
+patch:
+  "style/color_scheme": aqua
   "style/display_tray_icon": false
   "style/font_face": "Microsoft YaHei"
   "style/font_point": 24
